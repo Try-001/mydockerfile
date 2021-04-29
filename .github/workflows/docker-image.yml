@@ -57,4 +57,4 @@ jobs:
           docker build . --file Dockerfile --tag ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
           # 推送镜像到镜像仓库
           docker push ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
-        working-directory: ./$DockerfilePath
+        working-directory: $DockerfilePath
