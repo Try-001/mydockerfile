@@ -54,8 +54,7 @@ jobs:
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
           # 使用Dockerfile构建镜像
           pwd
-          cd $DockerfilePath
-          pwd
           docker build . --file Dockerfile --tag ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
           # 推送镜像到镜像仓库
           docker push ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
+        working-directory: ./$DockerfilePath
