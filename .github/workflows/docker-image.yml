@@ -14,22 +14,18 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: 
-  
   # workflow 执行时，传入参数
-  on: 
-  workflow_dispatch:
     inputs:
-	  # Dockerfile path
+      # Dockerfile path
       DockerfilePath:
         description: 'Dockerfile path'     
         required: true
         default: './'
-	  #docker tag
+        #docker tag
       tags:
         description: 'docker image tag'     
         required: true
         default: 'latest'
-		
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
