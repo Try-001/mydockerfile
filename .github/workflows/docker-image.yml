@@ -20,7 +20,7 @@ on:
       DockerfilePath:
         description: 'Dockerfile path'     
         required: true
-        default: './'
+        default: 'nginx-ingress-controller'
         #docker tag
       tags:
         description: 'docker image tag'     
@@ -53,8 +53,7 @@ jobs:
           # 登录dockerhub,登录docker的用户名和密码在Secrets中设置
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
           # 使用Dockerfile构建镜像
-          pwd
-          pwd $DockerfilePath/Dockerfile
+          cd $DockerfilePath
           docker build . --file $DockerfilePath/Dockerfile --tag ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
           # 推送镜像到镜像仓库
           docker push ${{ secrets.docker_repo }}/$image_name:${{ github.event.inputs.tag }}
