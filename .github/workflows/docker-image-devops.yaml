@@ -62,5 +62,5 @@ jobs:
           docker tag ${{ github.event.inputs.src_image_name }}:${{ github.event.inputs.tag }}  ${{ secrets.docker_repo }}/${{ github.event.inputs.dest_image_name }}:${{ github.event.inputs.tag }}
           
           # 推送镜像到镜像仓库
-           ${{ secrets.docker_repo }}/${{ github.event.inputs.dest_image_name }}:${{ github.event.inputs.tag }}
-        working-directory: ${{ github.event.inputs.DockerfilePath }}
+          docker push ${{ secrets.docker_repo }}/${{ github.event.inputs.dest_image_name }}:${{ github.event.inputs.tag }}
+        #working-directory: ${{ github.event.inputs.DockerfilePath }}
