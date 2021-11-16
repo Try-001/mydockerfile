@@ -1,0 +1,66 @@
+# This is a basic workflow to help you get started with Actions
+
+#将：k8s.gcr.io/ingress-nginx/controller:v0.45.0 推送到dockerhub：xxx/nginx-ingress-controller:v0.45.0
+
+# 构建镜像,并推送dockerhub镜像仓
+name: docker-image-devops
+
+# Controls when the action will run. 
+# 控制这个action什么时候运行
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  # 这里是只有master分支发生 push 或者 pull事件时才会触发action运行
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: 
+  # workflow 执行时，传入参数
+    inputs:
+      # Dockerfile path
+      src_image_name:
+        description: 'src docker image url'     
+        required: true
+        default: 'k8s.gcr.io/ingress-nginx/controller'
+      dest_image_name:
+        description: 'dest docker image url'     
+        required: true
+        default: 'nginx-ingress-controller'
+      #docker tag
+      tag:
+        description: 'set docker image tag'     
+        required: true
+        default: 'latest'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Build And Push Docker image
+        env:
+
+        run: | 
+          # 查看docker 版本
+          docker version
+          # 登录dockerhub,登录docker的用户名和密码在Secrets中设置
+          docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+
+          #下载镜像
+          docker pull ${{ github.event.inputs.src_image_name }}:${{ github.event.inputs.tag }}
+
+          #重命名镜像名称
+          docker tag ${{ github.event.inputs.src_image_name }}:${{ github.event.inputs.tag }}  ${{ secrets.docker_repo }}/${{ github.event.inputs.dest_image_name }}:${{ github.event.inputs.tag }}
+          
+          # 推送镜像到镜像仓库
+           ${{ secrets.docker_repo }}/${{ github.event.inputs.dest_image_name }}:${{ github.event.inputs.tag }}
+        working-directory: ${{ github.event.inputs.DockerfilePath }}
