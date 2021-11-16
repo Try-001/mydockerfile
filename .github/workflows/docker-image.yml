@@ -1,6 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+# 构建镜像,并推送dockerhub镜像仓
+name: devops-images
 
 # Controls when the action will run. 
 # 控制这个action什么时候运行
@@ -23,7 +24,7 @@ on:
         default: 'nginx-ingress-controller'
         #docker tag
       tag:
-        description: 'docker image tag'     
+        description: 'set docker image tag'     
         required: true
         default: 'latest'
 
